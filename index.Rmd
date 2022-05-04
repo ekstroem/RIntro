@@ -14,7 +14,12 @@ link-citations: yes
 github-repo: ekstroem/RIntro
 ---
 
+
 # Om denne "bog"
+
+
+![Ikke endeligt cover.](pics/fakecover.png)
+
 
 Denne hjemmeside indeholder udkastet til en intro-kapitel om R til en kommende danske lærebog i statistik. Kapitlet skal bruges som første skriftlige præsentation af R for de studerende, og tanken er, at kapitlet inkluderes som et appendiks i en statistiklærebog og bliver frit tilgængeligt online. Muligvis bliver kapitlet kun lagt online - det afhænger lidt af udformningen af resten af lærebogen.
 
