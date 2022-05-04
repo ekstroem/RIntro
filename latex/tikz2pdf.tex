@@ -1,0 +1,72 @@
+\documentclass{article}
+%\include{preview}
+\usepackage[xetex,active,tightpage]{preview}
+\usepackage{amsmath}
+% \usepackage{xltxtra}
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\usetikzlibrary{positioning}
+
+\usepackage[many,skins,breakable,xparse]{tcolorbox}
+\usepackage{mparhack}
+\usepackage{fancyvrb}
+\usepackage{pdfpages}
+\usepackage{boxedminipage,color}
+\usepackage{fontawesome}
+\usepackage[framemethod=TikZ]{mdframed}
+\tcbuselibrary{theorems}
+\usepackage{etoolbox}%                      
+\usepackage{blindtext}%
+\usepackage[danish]{babel}
+\usepackage{Alegreya}
+%\usepackage{fontspec}
+%\setmainfont[
+%  UprightFeatures={SmallCapsFont=AlegreyaSC-Regular},
+%  ItalicFeatures={SmallCapsFont=AlegreyaSC-Italic},
+%  BoldFeatures={SmallCapsFont=AlegreyaSC-Bold},
+%  BoldItalicFeatures={SmallCapsFont=AlegreyaSC-BoldItalic},
+%  Ligatures=TeX,
+%]{Alegreya}
+
+
+\makeatletter
+\renewcommand\tiny{\@setfontsize\tiny{5}{6}}
+\renewcommand\scriptsize{\@setfontsize\scriptsize{7}{8}}
+\renewcommand\footnotesize{\@setfontsize\footnotesize{8}{10}}
+\renewcommand\small{\@setfontsize\small{9}{12}}
+\renewcommand\normalsize{\@setfontsize\normalsize{10}{14}}
+\renewcommand\large{\@setfontsize\large{11}{15}}
+\renewcommand\Large{\@setfontsize\Large{12}{16}}
+\renewcommand\LARGE{\@setfontsize\LARGE{14}{18}}
+\renewcommand\huge{\@setfontsize\huge{20}{30}}
+\renewcommand\Huge{\@setfontsize\Huge{24}{36}}
+
+\renewcommand\tiny{\@setfontsize\tiny{7}{8}}                     % sidenote numbers
+\renewcommand\scriptsize{\@setfontsize\scriptsize{9}{11.5}}        % R computer input/output
+\renewcommand\footnotesize{\@setfontsize\footnotesize{9}{10.5}}  % sidenotes, captions
+\renewcommand\small{\@setfontsize\small{10}{14}}
+\renewcommand\normalsize{\@setfontsize\normalsize{11}{15}%
+  \setlength\abovedisplayskip{-10pt plus 3pt minus 9pt}
+  \setlength\abovedisplayshortskip{-10pt plus 1pt}
+  \setlength\belowdisplayshortskip{7pt plus 3pt minus 4pt}
+  \setlength\belowdisplayskip{12pt plus 3pt minus 9pt}  
+}
+\renewcommand\large{\@setfontsize\large{12}{16}}
+\renewcommand\Large{\@setfontsize\Large{14}{18}}                 % a-heads, toc entries, author, date
+\renewcommand\LARGE{\@setfontsize\LARGE{20}{30}}
+\renewcommand\huge{\@setfontsize\huge{24}{36}}
+\renewcommand\Huge{\@setfontsize\Huge{30}{45}}
+\makeatother
+
+
+\newcommand*\scalenodetext[2][3.3]{%
+    \pgfmathsetmacro\revscale{1/.5}%
+    \scalebox{#1}{\parbox{\revscale\linewidth}{#2}}%
+}
+     
+
+\begin{document}
+\begin{preview}
+%% TIKZ_CODE %%
+\end{preview}
+\end{document}
