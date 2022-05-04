@@ -6,7 +6,7 @@ site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
 # url: your book url like https://bookdown.org/yihui/bookdown
-# cover-image: path to the social sharing image like images/cover.jpg
+cover-image: pics/fakecover.png
 description: |
   Denne "bog" indeholder en introduktion til R og omfatter et kapitel fra en kommende dansk statistikbog. Kommentarer, forslag og ændringer modtages meget gerne.
   Kapitlet vil blive lagt online til fri afbenyttelse.
@@ -14,11 +14,11 @@ link-citations: yes
 github-repo: ekstroem/RIntro
 ---
 
-# Om
+# Om denne "bog"
 
 Denne hjemmeside indeholder udkastet til en intro-kapitel om R til en kommende danske lærebog i statistik. Kapitlet skal bruges som første skriftlige præsentation af R for de studerende, og tanken er, at kapitlet inkluderes som et appendiks i en statistiklærebog og bliver frit tilgængeligt online. Muligvis bliver kapitlet kun lagt online - det afhænger lidt af udformningen af resten af lærebogen.
 
-Fokus på læreboge og kurserne er på *statistik*, og det skal derfor *ikke* være en R bog. Samtidig er det imidlertid vigtigt at give læseren et værktøj, så de kan lave nogle af de almindelige beregninger, og det er her, at R kommer ind i billedet. Af samme grund indeholder kapitlet kun en minimale indføring i R - selve det at modellere, analysere, tegne grafik og fortolke resultaterne dukker op sammen  med de pågældende statistikbegreber.
+Fokus i lærebogen og på kurserne er på *statistik*, og det skal derfor *ikke* være en R bog. Samtidig er det imidlertid vigtigt at give læseren et værktøj, så de kan lave nogle af de almindelige beregninger, og det er her, at R kommer ind i billedet. Af samme grund indeholder kapitlet kun en minimale indføring i R - selve det at modellere, analysere, tegne grafik og fortolke resultaterne dukker op sammen  med de pågældende statistikbegreber.
 
 ## Du kan hjælpe til
 

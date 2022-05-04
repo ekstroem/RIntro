@@ -5,7 +5,7 @@ fig:rstudio-install-packages
 tab:importdata
 fig:rstudio-import-data
 tab:tidyversefunctions
-om
+om-denne-bog
 du-kan-hjælpe-til
 Rintro
 rstudio
