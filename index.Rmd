@@ -6,7 +6,7 @@ site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
 # url: your book url like https://bookdown.org/yihui/bookdown
-cover-image: pics/fakecover.png
+cover-image: https://github.com/ekstroem/RIntro/blob/4b56d9c2d0f91ed08df39c9ddbb88f058b5aca14/pics/fakecover.png
 description: |
   Denne "bog" indeholder en introduktion til R og omfatter et kapitel fra en kommende dansk statistikbog. Kommentarer, forslag og ændringer modtages meget gerne.
   Kapitlet vil blive lagt online til fri afbenyttelse.
