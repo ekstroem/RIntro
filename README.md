@@ -1,13 +1,7 @@
-Welcome! 
+# BOGPROJEKT
 
-This is a minimal example of a book based on R Markdown and **bookdown** (https://github.com/rstudio/bookdown). 
+Jeg har i nogen tid syslet med at skrive en dansk lærebog i statistik, der direkte integrerer R. Projektet har ligget i hi i en længere periode, men er ENDELIG begyndt at skyde fart igen. Nu ser det ud til, at der sker noget!
 
-This template provides a skeleton file structure that you can edit to create your book. 
+0Formålet med bogen er at give en dansk fremstilling af de statistiske grundbegreber og teknikker, og samtidig introducere et computerværktøj til selv at udføre avancerede statistiske analyser på store datasæt. Eksemplerne i bogen kan læses af alle studieretninger og kræver kun forudsætninger svarende til den danske gymnasieskole.
 
-The contents inside the .Rmd files provide some pointers to help you get started, but feel free to also delete the content in each file and start fresh.
-
-Additional resources:
-
-The **bookdown** book: https://bookdown.org/yihui/bookdown/
-
-The **bookdown** package reference site: https://pkgs.rstudio.com/bookdown
+Introduktionskapitlet om R bliver lagt online, men det første udkast er netop lagt ud. Hvis du allerede nu har lyst til læse, kommentere og/eller bidrage, vil det blive modtaget med kyshånd.
