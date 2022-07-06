@@ -1,4 +1,3 @@
-# (APPENDIX) Appendiks {-} 
 
 # Introduktion til R {#Rintro}
 
