@@ -36,6 +36,7 @@ Lige en ting mere: Der er nogle enkelte symboler, der *ikke* bliver vist i denne
 ![Eksempel på "taster", der ikke ses i onlineudgaven ... endnu.](pics/keys.png)
 
 
+
 ```{r include=FALSE}
 # automatically create a bib database for R packages
 knitr::write_bib(c(

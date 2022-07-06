@@ -15,6 +15,7 @@ brugere kan anvende disse nye metoder uden at skulle programmere dem
 selv.
 
 ```{r echo=FALSE, fig.margin=TRUE}
+figoutwidth <- "80%"
 knitr::include_graphics("pics/Rlogo.png")
 ```
 
@@ -530,19 +531,19 @@ m            # Udskriv m
 ## Import af data
 
 R kan importere data direkte fra de fleste dataformater og -baser. De
-simpleste formater kan indlæses direkte af R, mens mere komplicerede
-dataformater kræver, at den relevante pakke er installeret (se tabel
+simpleste formater kan indlæses direkte i R, mens mere komplicerede
+dataformater kræver, at en relevant pakke er installeret (se tabel
 \@ref(tab:importdata) for en oversigt).
 
-Filnavnet angives som første argument, men indlæsningsfunktioner i
-tabel \@ref(tab:importdata) har lidt forskellige muligheder alt
+Filnavnet angives som første argument, men indlæsningsfunktionerne i
+tabel \@ref(tab:importdata) har lidt forskellige argumenter alt
 afhængigt af dataformatet. Eksempelvis vil følgende kode indlæse
 første ark fra Excelfilen `forsøgsdata.xlsx`.^[Filen
 `forsøgsdata.xlsx` antages at ligge i samme bibliotek som R
-sessionen. Ellers skal den fulde sti til filen skrives. Filen kan hentes fra bogens hjemmeside.]
+sessionen. Ellers skal den fulde sti til filen skrives. Filen `forsøgsdata.xlsx` kan hentes fra bogens hjemmeside.]
 
 ```{r eval=FALSE}
-library("readxl")
+library("readxl")     # Indlæs pakken readxl
 minedata <- read_excel("forsøgsdata.xlsx", sheet=1)
 ```
 
@@ -560,12 +561,13 @@ Table: (\#tab:importdata) Funktioner og pakker til import af de mest almindelige
 |   JSON (`.json`) | `fromJSON()` | `jsonlite` |
 
 
-RStudio har en indbygget funktion til at importere dataset i
-tekstformat. En række almindelige tekstformater kan importeres via
-menupunktet `File > Import Dataset`, der hjælper med indlæsningen.
-Nedenfor er vist indholdet af en CSV-fil `patienter.csv`.^[En CSV-fil
-(comma-separated values) er en almindelig tekstfil, hvor søjlerne i
-datasættet er adskilt med comma, semikolon eller mellemrum. En fil med dette indhold kan findes på bogens hjemmeside.]
+Hjælp til at importere en række almindelige tekstformater kan findes
+direkte i RStudio via menupunktet `File > Import Dataset`.  Nedenfor
+er vist indholdet af CSV-filen\index{CSV-file}\index{filformat!CSV}
+`patienter.csv`.^[En CSV-fil (comma-separated values) er en almindelig
+tekstfil, hvor søjlerne i datasættet er adskilt med comma, semikolon
+eller mellemrum. En fil med dette indhold findes på bogens
+hjemmeside.]
 
 ```
 Navn;Alder;Status;BMI;Kon
@@ -575,38 +577,35 @@ Petersen;77;0;28,3;K
 Jørgensen;53;1;24,6;K
 ```
 
-```{r rstudio-import-data, echo=FALSE, fig.cap="Import af data gennem RStudios `File > Import Dataset > From CSV`. Her importeres data fra tekstfilen `patienter.csv`, og nederst er markeret, at søjleadskiller er semikolon. Den lille dialogboks dukker op ved tryk på 'Configure', og her kan man sætte decimaladskiller. Vinduet 'Data preview' viser, hvordan R ser filen med de givne indstillinger, og at det ser fornuftigt ud i dette tilfælde. R finder de fire søjler med de korrekte formater.", out.width="100%", fig.fullwidth=TRUE}
+```{r rstudio-import-data, echo=FALSE, fig.cap="Import af data gennem RStudios `File > Import Dataset > From CSV`. Her importeres data fra tekstfilen `patienter.csv`, og nederst er markeret, at søjleadskiller er semikolon. Den lille dialogboks dukker op efter tryk på 'Configure', og her kan man sætte decimaladskiller. Vinduet 'Data preview' viser, hvordan R ser filen med de givne indstillinger, og at det ser fornuftigt ud. R finder de fire søjler med de korrekte formater.", out.width="100%", fig.fullwidth=TRUE}
 knitr::include_graphics('pics/rstudio-import-data2.png', dpi = NA)
 ```
 
 Figur \@ref(fig:rstudio-import-data) viser dialogboksen, der
 fremkommer, når man vælger `File > Import Dataset > From CSV`. Øverst
-vælges den tekstfil, der skal indlæses, og nederst kan man markere, at
+vælges den tekstfil, der skal indlæses, og nederst markeres, at
 første linje i filen indeholder variabelnavnene (`First Row as
 Names`), og at variablene (søjlerne i filen) er adskilt med semikolon
 (`Delimiter`).
 
-Med knappen "Configure .."  dukker den lille dialogboks
-op, hvor man kan angive, at decimaladskiller er komma (det bruges i
+Med knappen "Configure .."  fremkommer den lille dialogboks, og det angives, at decimaladskiller er komma (det bruges i
 filen for variablen `BMI`) og ikke punktum, der er Rs almindelige
 decimaladskiller.
 
 Det store vindue "Data preview" viser, hvordan R ser den pågældende
-fil med de givne indstillinger. I figur \@ref(fig:rstudio-import-data)
-ses det, at data indlæses som fire søjler svarende til de fire
-variable i den oprindelige fil, og det ses, at `BMI` er korrekt
+fil med de givne indstillinger (figur \@ref(fig:rstudio-import-data))
+Her indlæses filen som fire søjler svarende til de fire
+variable i den oprindelige fil, og `BMI` er korrekt
 indlæst som en double (en numerisk variabel) med de korrekte værdier.
 Hvis indlæsningsindstillingerne er sat forkert bliver det klart i
-dette vindue, og man får en ide om, hvilke indstillinger der skal
-ændres.
+dette vindue.
 
-Nederst til højre i dialogboksen fremgår de kommandoer, som R kører
+Nederst til højre fremgår de kommandoer, som R kører
 for at indlæse filen. Disse kommandoer bør kopieres over i editoren,
-for at filen automatisk kan læses korrekt ind en anden gang.^[Dette er
+så datafilen automatisk indlæses korrekt en anden gang.^[Dette er
 specielt vigtigt for at kunne reproducere resultaterne. Hvis ikke de
-præcise argumenter til indlæsning bliver gemt, så risikerer man, at
-filen senere indlæses på en anden måde, hvilket kan resultere i
-andre resultater. ]
+præcise argumenter til indlæsning bliver gemt, så risikerer det, at
+filen senere indlæses på en anden måde, hvilket kan give andre resultater. ]
 
 
 ## Avanceret databehandling {#tidyverse}
