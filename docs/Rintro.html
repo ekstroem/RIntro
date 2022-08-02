@@ -26,7 +26,7 @@ Kapitlet vil blive lagt online til fri afbenyttelse.</p>" />
 <meta name="author" content="Claus Thorn Ekstrøm" />
 
 
-<meta name="date" content="2022-07-06" />
+<meta name="date" content="2022-08-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -161,7 +161,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.6" data-path="Rintro.html"><a href="Rintro.html#R-matricer"><i class="fa fa-check"></i><b>2.6</b> Tabeller og matricer</a></li>
 <li class="chapter" data-level="2.7" data-path="Rintro.html"><a href="Rintro.html#import-af-data"><i class="fa fa-check"></i><b>2.7</b> Import af data</a></li>
-<li class="chapter" data-level="2.8" data-path="Rintro.html"><a href="Rintro.html#tidyverse"><i class="fa fa-check"></i><b>2.8</b> Avanceret databehandling</a></li>
+<li class="chapter" data-level="2.8" data-path="Rintro.html"><a href="Rintro.html#tidyverse"><i class="fa fa-check"></i><b>2.8</b> Databehandling med tidyverse</a></li>
 <li class="chapter" data-level="2.9" data-path="Rintro.html"><a href="Rintro.html#opgaver"><i class="fa fa-check"></i><b>2.9</b> Opgaver</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="referencer.html"><a href="referencer.html"><i class="fa fa-check"></i>Referencer</a></li>
@@ -709,16 +709,25 @@ for at indlæse filen. Disse kommandoer bør kopieres over i editoren,
 så datafilen automatisk indlæses korrekt en anden gang.<a href="#fn19" class="footnote-ref" id="fnref19"><sup>19</sup></a></p>
 </div>
 <div id="tidyverse" class="section level2 hasAnchor" number="2.8">
-<h2><span class="header-section-number">2.8</span> Avanceret databehandling<a href="Rintro.html#tidyverse" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Data skal ofte tilpasses før de er klar til analyser: der skal laves nye variable, XXX eller . <code>tidyverse</code> er
-et sæt af pakker til R, der gør databehandling meget let. Funktionerne
-i <code>tidyverse</code> arbejder naturligt sammen med Rs data frames (kaldet
-<code>tibbles</code> i <code>tidyverse</code>) og i funktionerne slipper man
-for at skulle referere til variable i data frames med <code>$</code>.</p>
-<p>, og desuden introduceres operatoren <code>%&gt;%</code>,
-som kan kæde resultaterne fra flere kommandoer sammen, så de bliver
-lettere at læse.<a href="#fn20" class="footnote-ref" id="fnref20"><sup>20</sup></a> Tabel <a href="Rintro.html#tab:tidyversefunctions">2.3</a> viser de mest
+<h2><span class="header-section-number">2.8</span> Databehandling med tidyverse<a href="Rintro.html#tidyverse" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Data skal ofte tilpasses før de er klar til at blive
+analyseret. Variable skal have det rigtige format, der skal laves nye
+variabel, og datasættet skal måske omstruktureres. <code>tidyverse</code> er et
+sæt af pakker til R, der gør databehandling meget lettere.</p>
+<p>Funktionerne i <code>tidyverse</code> tager en data frame som første argument og
+returnerer selv en data frame.<a href="#fn20" class="footnote-ref" id="fnref20"><sup>20</sup></a> Dermed kan funktionerne let
+kombineres ved hjælp af operatoren <code>|&gt;</code>, der kæder resultaterne fra
+flere kommandoer sammen: resultatet af den første funktion bliver
+brugt som input til den næste funktion.<a href="#fn21" class="footnote-ref" id="fnref21"><sup>21</sup></a> Funktionerne i <code>tidyverse</code> har desuden den
+fordel, at det ikke er nødvendigt at referere til variable inde i en data
+frame med <code>$</code>. Tabel <a href="Rintro.html#tab:tidyversefunctions">2.3</a> viser de mest
 almindelige funktioner.</p>
+<div class="figure"><span style="display:block;" id="fig:pivot"></span>
+<img src="/Users/ekstrom/ku/bog/statistik_for_medicinere/pics/pivot-figure.jpg" alt="tidyverse introducerer funktionerne, pivot\_longer() og pivot\_wider(), der er nyttige at kende til, men som vi ikke vil komme nærmere ind på her. Funktionerne kan omstrukturere datasæt fra &quot;wide format&quot;\  til &quot;long format&quot;\  eller den anden vej. &quot;Wide&quot;\  datasæt optræder typisk, når der er gentagne målinger på samme forsøgsenhed. Et &quot;long&quot;\  datasæt indeholder den samme information, men de gentagne registreringer er spredt ud over flere rækker. Mange analysemetoder i R kræver data i &quot;long&quot;\ format." width="100%" />
+<p class="caption">
+Figure 2.5: tidyverse introducerer funktionerne, pivot_longer() og pivot_wider(), der er nyttige at kende til, men som vi ikke vil komme nærmere ind på her. Funktionerne kan omstrukturere datasæt fra “wide format”  til “long format”  eller den anden vej. “Wide”  datasæt optræder typisk, når der er gentagne målinger på samme forsøgsenhed. Et “long”  datasæt indeholder den samme information, men de gentagne registreringer er spredt ud over flere rækker. Mange analysemetoder i R kræver data i “long” format.
+</p>
+</div>
 <table>
 <caption><span id="tab:tidyversefunctions">Table 2.3: </span> De mest almindelige funktioner til datahåndtering ved hjælp af <code>tidyverse</code>.</caption>
 <colgroup>
@@ -737,107 +746,153 @@ almindelige funktioner.</p>
 <td>Sortér data</td>
 </tr>
 <tr class="even">
+<td><code>fct_collapse()</code></td>
+<td>Slå kategorier af en faktor sammen</td>
+</tr>
+<tr class="odd">
 <td><code>filter()</code></td>
 <td>Vælg observationer (rækker)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>group_by()</code></td>
 <td>Split data op i undergrupper</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>mutate()</code></td>
 <td>Ændre/lav nye variable</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>pivot_longer()</code></td>
 <td>Kombiner søjler, så datasættet bliver “langt”</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>pivot_wider()</code></td>
 <td>Tag to søjler (navne og værdier) og gør data “bredt”</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>pull()</code></td>
 <td>Udtræk en variabel som en vektor</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>select()</code></td>
 <td>Vælg søjler (variable)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>summarise()</code></td>
 <td>Opsummere data ud fra grupper</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>ungroup()</code></td>
 <td>Fjern undergrupper</td>
 </tr>
 </tbody>
 </table>
-<p>Til at vise databehandling med <code>tidyverse</code> bruger vi et datasæt om
-diabetes blandt 768 Pimaindianere. Datasættet hedder
-<code>PimaIndiansDiabetes2</code> og findes i pakken <code>mlbench</code>.<a href="#fn21" class="footnote-ref" id="fnref21"><sup>21</sup></a> Først indlæses data og de første par linjer vises.</p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="Rintro.html#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;mlbench&quot;</span>)         <span class="co"># Load pakke med data</span></span>
-<span id="cb83-2"><a href="Rintro.html#cb83-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;tidyverse&quot;</span>)       <span class="co"># Load tidyverse</span></span></code></pre></div>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-## ✔ tibble  3.1.7     ✔ dplyr   1.0.9
-## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-## ✔ readr   2.1.2     ✔ forcats 0.5.1</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="Rintro.html#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(PimaIndiansDiabetes2) <span class="co"># Gør datasæt tilgængeligt</span></span>
-<span id="cb87-2"><a href="Rintro.html#cb87-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(PimaIndiansDiabetes2) <span class="co"># Vis de første 6 linjer</span></span></code></pre></div>
-<pre><code>##   pregnant glucose pressure triceps insulin mass pedigree age diabetes
-## 1        6     148       72      35      NA 33.6    0.627  50      pos
-## 2        1      85       66      29      NA 26.6    0.351  31      neg
-## 3        8     183       64      NA      NA 23.3    0.672  32      pos
-## 4        1      89       66      23      94 28.1    0.167  21      neg
-## 5        0     137       40      35     168 43.1    2.288  33      pos
-## 6        5     116       74      NA      NA 25.6    0.201  30      neg</code></pre>
-<p>Vi vil her fokusere på variablene <code>diabetes</code>, <code>age</code>, <code>mass</code> (BMI) og
-<code>pressure</code> (diastolisk blodtryk). Disse udvælges med <code>select()</code>, og da
-resultatet skal bruges senere gemmes det i et nyt objekt.<a href="#fn22" class="footnote-ref" id="fnref22"><sup>22</sup></a></p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="Rintro.html#cb89-1" aria-hidden="true" tabindex="-1"></a>pima <span class="ot">&lt;-</span> PimaIndiansDiabetes2 <span class="sc">%&gt;%</span></span>
-<span id="cb89-2"><a href="Rintro.html#cb89-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(diabetes, age, mass, pressure)</span></code></pre></div>
-<p>Vil vi se nærmere på yngre, svært overvægtige personer, med
-BMI&gt;50 og med en alder mindre end 30 år kan vi bruge <code>filter()</code> til at udvælge de relevante personer.</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="Rintro.html#cb90-1" aria-hidden="true" tabindex="-1"></a>pima <span class="sc">%&gt;%</span> <span class="fu">filter</span>(mass<span class="sc">&gt;</span><span class="dv">50</span>, age<span class="sc">&lt;</span><span class="dv">30</span>)</span></code></pre></div>
-<pre><code>##     diabetes age mass pressure
-## 121      pos  25 53.2       76
-## 126      pos  26 55.0       30
-## 178      pos  26 67.1      110
-## 248      neg  23 52.3       90
-## 304      pos  28 52.9       98
-## 446      pos  25 59.4       78
-## 674      neg  22 57.3      100</code></pre>
-<p>Flere kommandoer kan kombineres ved at bruge <code>%&gt;%</code> gentagne
-gange. <code>arrange()</code> bruges eksempelvis til at sortere efter en eller
-flere variable.<a href="#fn23" class="footnote-ref" id="fnref23"><sup>23</sup></a></p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="Rintro.html#cb92-1" aria-hidden="true" tabindex="-1"></a>pima <span class="sc">%&gt;%</span> <span class="fu">filter</span>(mass<span class="sc">&gt;</span><span class="dv">50</span>, age<span class="sc">&lt;</span><span class="dv">30</span>) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(pressure)</span></code></pre></div>
-<pre><code>##     diabetes age mass pressure
-## 126      pos  26 55.0       30
-## 121      pos  25 53.2       76
-## 446      pos  25 59.4       78
-## 248      neg  23 52.3       90
-## 304      pos  28 52.9       98
-## 674      neg  22 57.3      100
-## 178      pos  26 67.1      110</code></pre>
-<p>Her er resultatet sorteret efter blodtryk. Nye variable kan defineres
-ved at bruge kommandoen <code>mutate()</code>. Eksempelvis kan vi lave en ny
-variabel, <code>highbp</code>, der angiver, om det diastoliske blodtryk er over
-90 mmHg ud fra den eksisterende variabel <code>pressure</code> i datasættet.</p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="Rintro.html#cb94-1" aria-hidden="true" tabindex="-1"></a>pima <span class="sc">%&gt;%</span> <span class="fu">filter</span>(mass<span class="sc">&gt;</span><span class="dv">50</span>, age<span class="sc">&lt;</span><span class="dv">30</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb94-2"><a href="Rintro.html#cb94-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">mutate</span>(<span class="at">highbp =</span> (pressure<span class="sc">&gt;</span><span class="dv">90</span>))</span></code></pre></div>
-<pre><code>##     diabetes age mass pressure highbp
-## 121      pos  25 53.2       76  FALSE
-## 126      pos  26 55.0       30  FALSE
-## 178      pos  26 67.1      110   TRUE
-## 248      neg  23 52.3       90  FALSE
-## 304      pos  28 52.9       98   TRUE
-## 446      pos  25 59.4       78  FALSE
-## 674      neg  22 57.3      100   TRUE</code></pre>
+<p>Som et eksempel på databehandling med <code>tidyverse</code> bruges et datasæt om
+behandling af diastolisk blodtryk hos 10 forsøgsdeltagere. De er alle
+målt to gange: ved forsøgsstart og efter 4 uger (variablene <code>start</code> og <code>4 uger</code>). Desuden er der en
+række yderligere registreringer på forsøgsdeltagerne, hvilket
+fremgår af datasættet i tabel <a href="#tab:tidyverseex1"><strong>??</strong></a>.<a href="#fn22" class="footnote-ref" id="fnref22"><sup>22</sup></a> Datasættet indeholder en
+række fejl: der er en højde og en diastolisk blodtryksmåling ved
+baseline, der er urealistiske, og desuden er værdierne af variablen
+<code>køn</code> skrevet på lidt forskellig måde. Endelig skal der udregnes BMI,
+som skal bruges til de efterfølgende analyser, og det skal sikres, at kategoriske variable opfattes som faktorer.</p>
+<p>Vi bygger dataoprensningen trinvist op. Først bruges <code>filter()</code> til at
+beholde individer (rækker i datasættet), der ikke har åbenlyst
+forkerte værdier.</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="Rintro.html#cb83-1" aria-hidden="true" tabindex="-1"></a>DF <span class="sc">|&gt;</span>                <span class="co"># Tag datasættet og behold rækker,</span></span>
+<span id="cb83-2"><a href="Rintro.html#cb83-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(start<span class="sc">&gt;</span><span class="dv">0</span>,    <span class="co"># hvor baseline diastolisk er større</span></span>
+<span id="cb83-3"><a href="Rintro.html#cb83-3" aria-hidden="true" tabindex="-1"></a>         hojde<span class="sc">&gt;</span><span class="dv">120</span>)  <span class="co"># end 0 og højde er større end 120</span></span></code></pre></div>
+<pre><code>##   alder    køn diab behandling hojde vaegt start 4 uger
+## 1    70   mand  nej         ny   177    96    99     81
+## 2    52   mand  nej     gammel   180    97   104     93
+## 3    46   Mand  nej     gammel   187    93    94     86
+## 4    47   mand  nej     gammel   185    93    97     91
+## 5    74 kvinde  nej     gammel   162    66   103     90
+## 6    68 kvinde  nej     gammel   161    59   103     90
+## 7    56 KVINDE   ja         ny   168    69   102     81
+## 8    59 kvinde   ja     gammel   167    70    96     86</code></pre>
+<p>På nuværende tidspunkt er det filtrerede datasæt ikke gemt. Det gøres først til sidst, så det er muligt at se resultaterne undervejs.</p>
+<p><code>mutate()</code> omkoder eksisterende variable eller laver nye. Først laves en ny variabel <code>bmi</code> ud fra <code>vaegt</code> og <code>hojde</code>, og koden til det er</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="Rintro.html#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Definer ny variabel bmi</span></span>
+<span id="cb85-2"><a href="Rintro.html#cb85-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">bmi =</span> vaegt <span class="sc">/</span> (hojde<span class="sc">/</span><span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
+<p>Så tilpasses variablen <code>køn</code> så variablen opfattes som en faktor og så
+fejlregistreringer slås sammen. I <code>fct_collapse()</code> specificeres,
+hvilke gamle kategorier, der skal samles i nye kategorier. Bemærk at <code>køn</code> overskrives i koden ved at kalde den “nye” variabel det samme navn som den gamle variabel.</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="Rintro.html#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Slå kategorier af køn sammen for at rette indtastningsfejl</span></span>
+<span id="cb86-2"><a href="Rintro.html#cb86-2" aria-hidden="true" tabindex="-1"></a><span class="co"># mand samler &quot;mand&quot; og &quot;Mand&quot;, mens kvinde samler</span></span>
+<span id="cb86-3"><a href="Rintro.html#cb86-3" aria-hidden="true" tabindex="-1"></a><span class="co"># &quot;kvinde&quot; og &quot;KVINDE&quot;</span></span>
+<span id="cb86-4"><a href="Rintro.html#cb86-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(køn <span class="ot">=</span> <span class="fu">fct_collapse</span>(køn,</span>
+<span id="cb86-5"><a href="Rintro.html#cb86-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">mand =</span> <span class="fu">c</span>(<span class="st">&quot;mand&quot;</span>, <span class="st">&quot;Mand&quot;</span>),</span>
+<span id="cb86-6"><a href="Rintro.html#cb86-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">kvinde =</span> <span class="fu">c</span>(<span class="st">&quot;kvinde&quot;</span>, <span class="st">&quot;KVINDE&quot;</span>))) </span></code></pre></div>
+<p>Endelig skal vi sikre, at både <code>diab</code> og <code>behandling</code> opfattes af R som
+faktorer. Igen bruges <code>mutate()</code> til at omdefinere og funktionen
+<code>factor()</code> omkoder variablen til en faktor. Det er ikke nødvendigt selv at
+specificere, hvilke kategorier, der findes, men med argumentet <code>levels</code> kan vælge den interne rækkefølgen på kategorierne, og den første kategori opfattes som referencekategorien.</p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="Rintro.html#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lav diab til en faktor</span></span>
+<span id="cb87-2"><a href="Rintro.html#cb87-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">diab =</span> <span class="fu">factor</span>(diab))</span>
+<span id="cb87-3"><a href="Rintro.html#cb87-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Lav behandling til et faktor og brug</span></span>
+<span id="cb87-4"><a href="Rintro.html#cb87-4" aria-hidden="true" tabindex="-1"></a><span class="co"># kategorien &quot;gammel&quot; som referencekategori</span></span>
+<span id="cb87-5"><a href="Rintro.html#cb87-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">behandling =</span> <span class="fu">factor</span>(behandling,</span>
+<span id="cb87-6"><a href="Rintro.html#cb87-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">levels=</span><span class="fu">c</span>(<span class="st">&quot;gammel&quot;</span>, <span class="st">&quot;ny&quot;</span>)))</span></code></pre></div>
+<p>Det hele kan samles til et enkelt kald til <code>mutate()</code>.</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="Rintro.html#cb88-1" aria-hidden="true" tabindex="-1"></a>DF <span class="sc">|&gt;</span>                   <span class="co"># Tag datasættet og behold rækker,</span></span>
+<span id="cb88-2"><a href="Rintro.html#cb88-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(start<span class="sc">&gt;</span><span class="dv">0</span>,       <span class="co"># hvor baseline diastolisk er større</span></span>
+<span id="cb88-3"><a href="Rintro.html#cb88-3" aria-hidden="true" tabindex="-1"></a>         hojde<span class="sc">&gt;</span><span class="dv">120</span>) <span class="sc">|&gt;</span>  <span class="co"># end 0 og højde er større end 120</span></span>
+<span id="cb88-4"><a href="Rintro.html#cb88-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">bmi =</span> vaegt <span class="sc">/</span> (hojde<span class="sc">/</span><span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span>,    <span class="co"># Lav BMI</span></span>
+<span id="cb88-5"><a href="Rintro.html#cb88-5" aria-hidden="true" tabindex="-1"></a>         køn <span class="ot">=</span> <span class="fu">fct_collapse</span>(køn,         <span class="co"># Slå grupper sammen</span></span>
+<span id="cb88-6"><a href="Rintro.html#cb88-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">mand =</span> <span class="fu">c</span>(<span class="st">&quot;mand&quot;</span>, <span class="st">&quot;Mand&quot;</span>),</span>
+<span id="cb88-7"><a href="Rintro.html#cb88-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">kvinde =</span> <span class="fu">c</span>(<span class="st">&quot;kvinde&quot;</span>, <span class="st">&quot;KVINDE&quot;</span>)),</span>
+<span id="cb88-8"><a href="Rintro.html#cb88-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">behandling =</span> <span class="fu">factor</span>(behandling, <span class="co"># Lav til faktor</span></span>
+<span id="cb88-9"><a href="Rintro.html#cb88-9" aria-hidden="true" tabindex="-1"></a>                             <span class="at">levels=</span><span class="fu">c</span>(<span class="st">&quot;gammel&quot;</span>, <span class="st">&quot;ny&quot;</span>)),</span>
+<span id="cb88-10"><a href="Rintro.html#cb88-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">diab =</span> <span class="fu">factor</span>(diab)             <span class="co"># Lav til faktor</span></span>
+<span id="cb88-11"><a href="Rintro.html#cb88-11" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
+<pre><code>##   alder    køn diab behandling hojde vaegt start 4 uger      bmi
+## 1    70   mand  nej         ny   177    96    99     81 30.64254
+## 2    52   mand  nej     gammel   180    97   104     93 29.93827
+## 3    46   mand  nej     gammel   187    93    94     86 26.59498
+## 4    47   mand  nej     gammel   185    93    97     91 27.17312
+## 5    74 kvinde  nej     gammel   162    66   103     90 25.14861
+## 6    68 kvinde  nej     gammel   161    59   103     90 22.76147
+## 7    56 kvinde   ja         ny   168    69   102     81 24.44728
+## 8    59 kvinde   ja     gammel   167    70    96     86 25.09950</code></pre>
+<p>Endelig kan vi fjerne de variable, som ikke længere er
+nødvendige. <code>select()</code> vælger søjler i datasættet, som skal gemmes,
+men med minus foran udvælgelsen angives de søjler, der skal fjernes.</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="Rintro.html#cb90-1" aria-hidden="true" tabindex="-1"></a>DF <span class="sc">|&gt;</span>                   <span class="co"># Tag datasættet og behold rækker,</span></span>
+<span id="cb90-2"><a href="Rintro.html#cb90-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(start<span class="sc">&gt;</span><span class="dv">0</span>,       <span class="co"># hvor baseline diastolisk er større</span></span>
+<span id="cb90-3"><a href="Rintro.html#cb90-3" aria-hidden="true" tabindex="-1"></a>         hojde<span class="sc">&gt;</span><span class="dv">120</span>) <span class="sc">|&gt;</span>  <span class="co"># end 0 og højde er større end 120</span></span>
+<span id="cb90-4"><a href="Rintro.html#cb90-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">bmi =</span> vaegt <span class="sc">/</span> (hojde<span class="sc">/</span><span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span>,    <span class="co"># Lav BMI</span></span>
+<span id="cb90-5"><a href="Rintro.html#cb90-5" aria-hidden="true" tabindex="-1"></a>         køn <span class="ot">=</span> <span class="fu">fct_collapse</span>(køn,         <span class="co"># Slå grupper sammen</span></span>
+<span id="cb90-6"><a href="Rintro.html#cb90-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">mand =</span> <span class="fu">c</span>(<span class="st">&quot;mand&quot;</span>, <span class="st">&quot;Mand&quot;</span>),</span>
+<span id="cb90-7"><a href="Rintro.html#cb90-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">kvinde =</span> <span class="fu">c</span>(<span class="st">&quot;kvinde&quot;</span>, <span class="st">&quot;KVINDE&quot;</span>)),</span>
+<span id="cb90-8"><a href="Rintro.html#cb90-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">behandling =</span> <span class="fu">factor</span>(behandling, <span class="co"># Lav til faktor</span></span>
+<span id="cb90-9"><a href="Rintro.html#cb90-9" aria-hidden="true" tabindex="-1"></a>                             <span class="at">levels=</span><span class="fu">c</span>(<span class="st">&quot;gammel&quot;</span>, <span class="st">&quot;ny&quot;</span>)),</span>
+<span id="cb90-10"><a href="Rintro.html#cb90-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">diab =</span> <span class="fu">factor</span>(diab)             <span class="co"># Lav til faktor</span></span>
+<span id="cb90-11"><a href="Rintro.html#cb90-11" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">|&gt;</span>                             <span class="co"># Og så </span></span>
+<span id="cb90-12"><a href="Rintro.html#cb90-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(hojde, vaegt))               <span class="co"># Fjern hojde/vaegt</span></span></code></pre></div>
+<pre><code>##   alder    køn diab behandling start 4 uger      bmi
+## 1    70   mand  nej         ny    99     81 30.64254
+## 2    52   mand  nej     gammel   104     93 29.93827
+## 3    46   mand  nej     gammel    94     86 26.59498
+## 4    47   mand  nej     gammel    97     91 27.17312
+## 5    74 kvinde  nej     gammel   103     90 25.14861
+## 6    68 kvinde  nej     gammel   103     90 22.76147
+## 7    56 kvinde   ja         ny   102     81 24.44728
+## 8    59 kvinde   ja     gammel    96     86 25.09950</code></pre>
+<p>Det oprensede datasæt er stadig ikke gemt. Det gøres ved at gemme resultatet af hele processen i et nyt objekt <code>rettede_data</code>, som så kan bruges til de efterfølgende analyser.</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="Rintro.html#cb92-1" aria-hidden="true" tabindex="-1"></a>rettede_data <span class="ot">&lt;-</span></span>
+<span id="cb92-2"><a href="Rintro.html#cb92-2" aria-hidden="true" tabindex="-1"></a>DF <span class="sc">|&gt;</span>                   <span class="co"># Tag datasættet og behold rækker,</span></span>
+<span id="cb92-3"><a href="Rintro.html#cb92-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(start<span class="sc">&gt;</span><span class="dv">0</span>,       <span class="co"># hvor baseline diastolisk er større</span></span>
+<span id="cb92-4"><a href="Rintro.html#cb92-4" aria-hidden="true" tabindex="-1"></a>         hojde<span class="sc">&gt;</span><span class="dv">120</span>) <span class="sc">|&gt;</span>  <span class="co"># end 0 og højde er større end 120</span></span>
+<span id="cb92-5"><a href="Rintro.html#cb92-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">bmi =</span> vaegt <span class="sc">/</span> (hojde<span class="sc">/</span><span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span>,    <span class="co"># Lav BMI</span></span>
+<span id="cb92-6"><a href="Rintro.html#cb92-6" aria-hidden="true" tabindex="-1"></a>         køn <span class="ot">=</span> <span class="fu">fct_collapse</span>(køn,         <span class="co"># Slå grupper sammen</span></span>
+<span id="cb92-7"><a href="Rintro.html#cb92-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">mand =</span> <span class="fu">c</span>(<span class="st">&quot;mand&quot;</span>, <span class="st">&quot;Mand&quot;</span>),</span>
+<span id="cb92-8"><a href="Rintro.html#cb92-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">kvinde =</span> <span class="fu">c</span>(<span class="st">&quot;kvinde&quot;</span>, <span class="st">&quot;KVINDE&quot;</span>)),</span>
+<span id="cb92-9"><a href="Rintro.html#cb92-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">behandling =</span> <span class="fu">factor</span>(behandling, <span class="co"># Lav til faktor</span></span>
+<span id="cb92-10"><a href="Rintro.html#cb92-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">levels=</span><span class="fu">c</span>(<span class="st">&quot;gammel&quot;</span>, <span class="st">&quot;ny&quot;</span>)),</span>
+<span id="cb92-11"><a href="Rintro.html#cb92-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">diab =</span> <span class="fu">factor</span>(diab)             <span class="co"># Lav til faktor</span></span>
+<span id="cb92-12"><a href="Rintro.html#cb92-12" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">|&gt;</span>                             <span class="co"># Og så </span></span>
+<span id="cb92-13"><a href="Rintro.html#cb92-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(hojde, vaegt))               <span class="co"># Fjern hojde/vaegt</span></span></code></pre></div>
 <p><code>tidyverse</code> indeholder to andre nyttige funktioner, <code>summarise()</code> og
 <code>group_by()</code>, der henholdsvis bruges til at opsummere data og at splitte
 data op i undergrupper for at lave opsummeringer for hver
@@ -851,20 +906,20 @@ gruppe. Disse to funktioner introduceres nærmere i kapitel
 <ol style="list-style-type: upper-alpha">
 <li><span class="math inline">\(12\cdot6\)</span></li>
 <li><span class="math inline">\(2\cdot(1+3)^2\)</span></li>
-<li><span class="math inline">\(\log(20) + \sqrt{13}\)</span></li>
+<li><span class="math inline">\(\log(20) + \sqrt{13}\)</span> [ log henviser til den naturlige logaritme ]</li>
 </ol></li>
 <li><p>Definer følgende to vektorer</p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="Rintro.html#cb96-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">2</span>)</span>
-<span id="cb96-2"><a href="Rintro.html#cb96-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>)</span></code></pre></div>
-<p>Overvej — uden at køre linjerne — hvad følgende kommandoer i R vil give</p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="Rintro.html#cb97-1" aria-hidden="true" tabindex="-1"></a>x<span class="dv">-2</span></span>
-<span id="cb97-2"><a href="Rintro.html#cb97-2" aria-hidden="true" tabindex="-1"></a>x<span class="sc">^</span><span class="dv">2</span>    </span>
-<span id="cb97-3"><a href="Rintro.html#cb97-3" aria-hidden="true" tabindex="-1"></a>x<span class="sc">+</span>y</span>
-<span id="cb97-4"><a href="Rintro.html#cb97-4" aria-hidden="true" tabindex="-1"></a>x<span class="sc">*</span>y</span>
-<span id="cb97-5"><a href="Rintro.html#cb97-5" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(x)</span>
-<span id="cb97-6"><a href="Rintro.html#cb97-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(x)</span>
-<span id="cb97-7"><a href="Rintro.html#cb97-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x)</span>
-<span id="cb97-8"><a href="Rintro.html#cb97-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(x<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="Rintro.html#cb93-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">2</span>)</span>
+<span id="cb93-2"><a href="Rintro.html#cb93-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>)</span></code></pre></div>
+<p>Overvej — uden at køre linjerne — hvad følgende kommandoer giver</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="Rintro.html#cb94-1" aria-hidden="true" tabindex="-1"></a>x<span class="dv">-2</span></span>
+<span id="cb94-2"><a href="Rintro.html#cb94-2" aria-hidden="true" tabindex="-1"></a>x<span class="sc">^</span><span class="dv">2</span>    </span>
+<span id="cb94-3"><a href="Rintro.html#cb94-3" aria-hidden="true" tabindex="-1"></a>x<span class="sc">+</span>y</span>
+<span id="cb94-4"><a href="Rintro.html#cb94-4" aria-hidden="true" tabindex="-1"></a>x<span class="sc">*</span>y</span>
+<span id="cb94-5"><a href="Rintro.html#cb94-5" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(x)</span>
+<span id="cb94-6"><a href="Rintro.html#cb94-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(x)</span>
+<span id="cb94-7"><a href="Rintro.html#cb94-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x)</span>
+<span id="cb94-8"><a href="Rintro.html#cb94-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(x<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
 <p>Brug R til at checke, om dine overvejelser var korrekte.</p></li>
 <li><p>Fødselsvægten (i gram), fostrets alder (i uger) og køn for 8 nyfødte er vist i tabellen nedenfor.</p>
 <table>
@@ -920,28 +975,28 @@ gruppe. Disse to funktioner introduceres nærmere i kapitel
 </table>
 <ol style="list-style-type: upper-alpha">
 <li><p>Lav en vektor <code>vaegt</code>, der indeholder de 8 vægtmålinger. Brug for eksempel funktionen <code>c()</code>.</p></li>
-<li><p>Lav en vektor <code>alder</code>, der indeholder aldersmålingerne og en vektor <code>kon</code>, der indeholder informationen om køn.</p></li>
+<li><p>Lav to nye vektorer <code>alder</code> og <code>kon</code>, der indeholder henholdsvis aldersmålingerne og informationen om køn.</p></li>
 <li><p>Udregn en ny vektor, <code>kg</code>, der indeholder de afrundede vægtmålinger i kg. Brug funktionen <code>round()</code> til at afrunde fødselsvægten til nærmeste 100 gram.
-Brug hjælpesiden til <code>round()</code> til at finde ud af, hvordan man vælger antallet af betydende cifre, når man afrunder.</p></li>
+Brug hjælpesiden til <code>round()</code> til at finde ud af, hvordan man vælger antallet af betydende cifre, når man afrunder.<a href="#fn23" class="footnote-ref" id="fnref23"><sup>23</sup></a></p></li>
 <li><p>De nyfødte piger svarer til måling nummer 6, 7 og 8. Brug indicering af vektoren <code>vaegt</code> til at udtrække fødselsvægten for observation 6, 7 og 8.
 Hvad er den gennemsnitlige fødselsvægt for de tre piger?</p>
 <p>Det er sjældent, at man kender de specifikke observationsnumre, man vil udtrække.
 Brug i stedet oplysningerne fra vektoren <code>kon</code> til at udtrække fødselsvægten for pigerne.</p></li>
-<li><p>Lav en data frame, <code>DF</code>, der indeholder de 4 variable <code>kon</code>, <code>alder</code>, <code>vaegt</code> og <code>kg</code>. Prøv at køre kommandoen</p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="Rintro.html#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(DF)</span></code></pre></div>
-<p>Hvad viser den?</p>
-<p>Se hjælpesiden til <code>head()</code> for at se, hvordan man ændrer antallet af linjer, der vises.<a href="#fn24" class="footnote-ref" id="fnref24"><sup>24</sup></a></p>
-<p>Prøv at køre kommandoen</p>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="Rintro.html#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(DF)</span></code></pre></div>
-<p>Hvad viser den? Hvorfor er formatet forskelligt for <code>vaegt</code> og <code>kon</code>?</p></li>
 <li><p>Erstat det 4. element af <code>vaegt</code> i <code>DF</code> fra 2975 til værdien 3075.</p>
-<p>Udregn den gennemsnitlige fødselsvægt for alle 8 personer i <code>DF</code>.<a href="#fn25" class="footnote-ref" id="fnref25"><sup>25</sup></a></p></li>
+<p>Udregn den gennemsnitlige fødselsvægt for alle 8 personer i <code>DF</code>.<a href="#fn24" class="footnote-ref" id="fnref24"><sup>24</sup></a></p></li>
+<li><p>Lav en data frame, <code>DF</code>, der indeholder de 4 variable <code>kon</code>, <code>alder</code>, <code>vaegt</code> og <code>kg</code>. Prøv at køre kommandoen</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="Rintro.html#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(DF)</span></code></pre></div>
+<p>Hvad viser den?</p>
+<p>Se hjælpesiden til <code>head()</code> for at se, hvordan man ændrer antallet af linjer, der vises.<a href="#fn25" class="footnote-ref" id="fnref25"><sup>25</sup></a></p>
+<p>Prøv at køre kommandoen</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="Rintro.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(DF)</span></code></pre></div>
+<p>Hvad viser den? Hvorfor er formatet forskelligt for <code>vaegt</code> og <code>kon</code>?</p></li>
 </ol></li>
-<li><p>Datasættet <code>morbarn</code> fra pakken <code>stat4med</code> indeholder oplysninger om en tilfældig stikprøve på 400 førstegangsfødende mødre fra det såkaldte Mor-Barn studie XXX, der følger levendefødte børn fra terminsugerne 37-42, og hvor moderen ikke drak under graviditeten. Datasættet indeholder seks registreringer om hver moder: alder (i år), ryger (ja/nej), kaffedrikker (ja/nej), uge (gestationsalder ved fødslen i uger), vaegt (barnets vægt i gram) og længde (barnets længde i cm).</p>
-<p>De efterfølgende spørgsmål kan med fordel besvare ved brug af funktionerne fra <code>tidyverse</code> pakken.</p>
+<li><p>Datasættet <code>morbarn</code> fra pakken <code>stat4med</code> indeholder oplysninger om en tilfældig stikprøve på 400 førstegangsfødende mødre fra det såkaldte Mor-Barn studie XXX (indsæt ref), der følger levendefødte børn fra terminsugerne 37-42, og hvor moderen ikke drak under graviditeten. Datasættet indeholder seks registreringer om hver moder: alder (i år), ryger (ja/nej), kaffedrikker (ja/nej), uge (gestationsalder ved fødslen i uger), vaegt (barnets vægt i gram) og længde (barnets længde i cm).</p>
 <p>Data kan indlæses ved at skrive kommandoen</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="Rintro.html#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;stat4med&quot;</span>)  <span class="co"># Indlæs pakken</span></span>
-<span id="cb100-2"><a href="Rintro.html#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;morbarn&quot;</span>)  <span class="co"># Gør data tilgængelige</span></span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="Rintro.html#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;stat4med&quot;</span>)  <span class="co"># Indlæs pakken</span></span>
+<span id="cb97-2"><a href="Rintro.html#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;morbarn&quot;</span>)  <span class="co"># Gør data tilgængelige</span></span></code></pre></div>
+<p>De efterfølgende spørgsmål kan med fordel besvares ved brug af funktionerne fra <code>tidyverse</code> pakken.</p>
 <ol style="list-style-type: upper-alpha">
 <li>Hvad er gennemsnitsalderen for de 400 førstegangsfødende? Hvad er gennemsnitsvægten for de nyfødte?</li>
 <li>Lav en ny data frame kaldet <code>deldata</code>, der kun indeholder de mødre, der hverken ryger eller drikker kaffe.<a href="#fn26" class="footnote-ref" id="fnref26"><sup>26</sup></a></li>
@@ -949,7 +1004,7 @@ Brug i stedet oplysningerne fra vektoren <code>kon</code> til at udtrække føds
 <li>Hvor mange børn har lav fødselsvægt?<a href="#fn27" class="footnote-ref" id="fnref27"><sup>27</sup></a></li>
 </ol></li>
 <li><p>Hver gang man starter på et nyt projekt er det en god ide at lave
-et bibliotek på computeren, der indeholder alle data og R
+et bibliotek/en folder på computeren, der indeholder alle data og R
 scripts. Det sikrer, at man har data og programmer samlet, og at
 man ikke får sammenblandet filer fra forskellige analyser.</p>
 <p>Når R starter op starter den typisk i samme bibliotek, og det kan
@@ -1031,16 +1086,20 @@ hjemmeside.<a href="Rintro.html#fnref18" class="footnote-back">↩︎</a></p></l
 specielt vigtigt for at kunne reproducere resultaterne. Hvis ikke de
 præcise argumenter til indlæsning bliver gemt, så risikerer det, at
 filen senere indlæses på en anden måde, hvilket kan give andre resultater. <a href="Rintro.html#fnref19" class="footnote-back">↩︎</a></p></li>
-<li id="fn20"><p><code>%&gt;%</code> kaldes også en “pipe”, da den kan kanalisere resultatet fra en funktion videre til den næste funktion.<a href="Rintro.html#fnref20" class="footnote-back">↩︎</a></p></li>
-<li id="fn21"><p>Husk, at
-pakkerne skal installeres før datasættene og funktionerne i dem kan
-bruges.<a href="Rintro.html#fnref21" class="footnote-back">↩︎</a></p></li>
-<li id="fn22"><p>Vi kan læse udtrykket som følger: “Tag <code>PimaIndiansDiabetes2</code> og så udvælges variablene <code>diabetes</code>, <code>age</code>, <code>mass</code> og <code>pressure</code> ved hjælp af <code>select()</code>”. Operatoren <code>%&gt;%</code> læses som “og så”.<a href="Rintro.html#fnref22" class="footnote-back">↩︎</a></p></li>
-<li id="fn23"><p>Igen kan udtrykket læses som “Tag datasættet, og så vælg først de rækker, hvor BMI er større end 50 og alder er mindre end 30 år. Og så skal dette resultat efterfølgende sorteres efter blodtryk (fra lav til høj). Vil man have sorteret fra høj til lav bruges <code>arrange(desc(pressure))</code>, hvor <code>desc</code> henviser til”descending”.<a href="Rintro.html#fnref23" class="footnote-back">↩︎</a></p></li>
-<li id="fn24"><p><code>head()</code> er særlig nyttig,
-hvis man vil have et hurtigt overblik over indholdet i en data frame eller en vektor.<a href="Rintro.html#fnref24" class="footnote-back">↩︎</a></p></li>
-<li id="fn25"><p>Brug enten <code>$</code> eller
-indicering til at trække den relevante variabel ud af data framen.<a href="Rintro.html#fnref25" class="footnote-back">↩︎</a></p></li>
+<li id="fn20"><p><code>tidyverse</code> bruger en udvidet data
+frame kaldet <code>tibbles</code> i <code>tidyverse</code>, men den fungerer
+som en data frame. Udtales “tibbles” lidt hurtigt lyder det næsten
+ligesom “tables”.<a href="Rintro.html#fnref20" class="footnote-back">↩︎</a></p></li>
+<li id="fn21"><p><code>|&gt;</code> består af to tegn: “lodret streg” og “større end” og kaldes en “pipe”,
+da den som et rør fører resultatet fra en funktion videre til den
+næste funktion.<a href="Rintro.html#fnref21" class="footnote-back">↩︎</a></p></li>
+<li id="fn22"><p>Datasættet
+findes også i pakken stat4med og hedder XXX.<a href="Rintro.html#fnref22" class="footnote-back">↩︎</a></p></li>
+<li id="fn23"><p>Fif: <code>round()</code> afrunder betydende cifre efter kommaet. For at afrunde til nærmeste 100 g kan det derfor være nødvendigt først at dividere den oprindelig vægt, dernæst afrunde og så gange op igen.<a href="Rintro.html#fnref23" class="footnote-back">↩︎</a></p></li>
+<li id="fn24"><p>Brug enten <code>$</code> eller
+indicering til at trække den relevante variabel ud af data framen.<a href="Rintro.html#fnref24" class="footnote-back">↩︎</a></p></li>
+<li id="fn25"><p><code>head()</code> er særlig nyttig,
+hvis man vil have et hurtigt overblik over indholdet i en data frame eller en vektor.<a href="Rintro.html#fnref25" class="footnote-back">↩︎</a></p></li>
 <li id="fn26"><p>Husk, at man skal bruge to lighedstegn, når man checker om en variabel er lig en bestemt værdi.<a href="Rintro.html#fnref26" class="footnote-back">↩︎</a></p></li>
 <li id="fn27"><p>Man kan bruge funktionen <code>sum()</code> til at tælle op, hvor ofte <code>lavvaegt</code> er <code>TRUE</code>.<a href="Rintro.html#fnref27" class="footnote-back">↩︎</a></p></li>
 </ol>

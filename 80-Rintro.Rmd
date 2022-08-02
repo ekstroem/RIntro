@@ -13,8 +13,9 @@ visualiserings- og analysemetoder publiceres med kode til R, så alle
 brugere kan anvende disse nye metoder uden at skulle programmere dem
 selv.
 
-```{r echo=FALSE, fig.margin=TRUE}
+```{r echo=FALSE, fig.margin=TRUE, message=FALSE, warning=FALSE}
 # (APPENDIX) Appendiks {-}
+library("tidyverse")
  figoutwidth <- "80%"
 knitr::include_graphics("pics/Rlogo.png")
 ```

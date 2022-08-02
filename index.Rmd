@@ -14,9 +14,7 @@ link-citations: yes
 github-repo: ekstroem/RIntro
 ---
 
-
 # Om denne "bog"
-
 
 ![Ikke endeligt cover.](pics/fakecover.png)
 
