@@ -1,3 +1,4 @@
+#  Appendiks {-}
 
 # Introduktion til R {#Rintro}
 
@@ -14,6 +15,7 @@ brugere kan anvende disse nye metoder uden at skulle programmere dem
 selv.
 
 ```{r echo=FALSE, fig.margin=TRUE}
+# (APPENDIX)
 figoutwidth <- "80%"
 knitr::include_graphics("pics/Rlogo.png")
 ```
@@ -607,25 +609,39 @@ præcise argumenter til indlæsning bliver gemt, så risikerer det, at
 filen senere indlæses på en anden måde, hvilket kan give andre resultater. ]
 
 
-## Avanceret databehandling {#tidyverse}
+## Databehandling med tidyverse {#tidyverse}
 
-Data skal ofte tilpasses før de er klar til analyser: der skal laves nye variable, XXX  eller . `tidyverse` er
-et sæt af pakker til R, der gør databehandling meget let. Funktionerne
-i `tidyverse` arbejder naturligt sammen med Rs data frames (kaldet
-`tibbles`\index{tibble} i `tidyverse`) og i funktionerne slipper man
-for at skulle referere til variable i data frames med `$`.
+Data skal ofte tilpasses før de er klar til at blive
+analyseret. Variable skal have det rigtige format, der skal laves nye
+variabel, og datasættet skal måske omstruktureres. `tidyverse` er et
+sæt af pakker til R, der gør databehandling meget lettere.
 
-
-, og desuden introduceres operatoren `%>%`,
-som kan kæde resultaterne fra flere kommandoer sammen, så de bliver
-lettere at læse.^[`%>%` kaldes også en "pipe", da den kan kanalisere resultatet fra en funktion videre til den næste funktion.] Tabel \@ref(tab:tidyversefunctions) viser de mest
+Funktionerne i `tidyverse` tager en data frame som første argument og
+returnerer selv en data frame.^[`tidyverse` bruger en udvidet data
+frame kaldet `tibbles`\index{tibble} i `tidyverse`, men den fungerer
+som en data frame. Udtales "tibbles" lidt hurtigt lyder det næsten
+ligesom "tables".] Dermed kan funktionerne let
+kombineres ved hjælp af operatoren `|>`, der kæder resultaterne fra
+flere kommandoer sammen: resultatet af den første funktion bliver
+brugt som input til den næste funktion.^[`|>` består af to tegn: "lodret streg" og "større end" og kaldes en "pipe",
+da den som et rør fører resultatet fra en funktion videre til den
+næste funktion.] Funktionerne i `tidyverse` har desuden den
+fordel, at det ikke er nødvendigt at referere til variable inde i en data
+frame med `$`. Tabel \@ref(tab:tidyversefunctions) viser de mest
 almindelige funktioner.
+
+
+
+```{r pivot, echo=FALSE, fig.cap='tidyverse introducerer funktionerne, pivot\\_longer() og pivot\\_wider(), der er nyttige at kende til, men som vi ikke vil komme nærmere ind på her. Funktionerne kan omstrukturere datasæt fra "wide format"\\  til "long format"\\  eller den anden vej. "Wide"\\  datasæt optræder typisk, når der er gentagne målinger på samme forsøgsenhed. Et "long"\\  datasæt indeholder den samme information, men de gentagne registreringer er spredt ud over flere rækker. Mange analysemetoder i R kræver data i "long"\\ format.', out.width='100%', fig.show = 'hold', fig.margin=TRUE, fig.height=4}
+knitr::include_graphics("pics/pivot-figure.jpg")
+```
 
 Table: (\#tab:tidyversefunctions) De mest almindelige funktioner til datahåndtering ved hjælp af `tidyverse`.
 
 | Funktion | Forklaring | 
 |--------|------------------|
 |   `arrange()`  | Sortér data  |
+|   `fct_collapse()`  | Slå kategorier af en faktor sammen |
 |   `filter()` | Vælg observationer (rækker) |
 |   `group_by()` | Split data op i undergrupper |
 |   `mutate()`  | Ændre/lav nye variable |
@@ -637,52 +653,152 @@ Table: (\#tab:tidyversefunctions) De mest almindelige funktioner til datahåndte
 |   `ungroup()`  | Fjern undergrupper |
 
 
-Til at vise databehandling med `tidyverse` bruger vi et datasæt om
-diabetes blandt 768 Pimaindianere. Datasættet hedder
-`PimaIndiansDiabetes2` og findes i pakken `mlbench`.^[Husk, at
-pakkerne skal installeres før datasættene og funktionerne i dem kan
-bruges.] Først indlæses data og de første par linjer vises.
+Som et eksempel på databehandling med `tidyverse` bruges et datasæt om
+behandling af diastolisk blodtryk hos 10 forsøgsdeltagere. De er alle
+målt to gange: ved forsøgsstart og efter 4 uger (variablene `start` og `4 uger`). Desuden er der en
+række yderligere registreringer på forsøgsdeltagerne, hvilket
+fremgår af datasættet i tabel \@ref(tab:tidyverseex1).^[Datasættet
+findes også i pakken stat4med og hedder XXX.] Datasættet indeholder en
+række fejl: der er en højde og en diastolisk blodtryksmåling ved
+baseline, der er urealistiske, og desuden er værdierne af variablen
+`køn` skrevet på lidt forskellig måde. Endelig skal der udregnes BMI,
+som skal bruges til de efterfølgende analyser, og det skal sikres, at kategoriske variable opfattes som faktorer.
+
+```{r tidyverseex1, echo=FALSE}
+set.seed(1)
+n <- 10
+DF <- data.frame(
+#  id = 1:n,
+  alder = sample(46:76, size=n, replace=TRUE),
+  køn = sample(c("mand", "kvinde"), size=n, replace=TRUE)
+) |>
+  dplyr::mutate(bmi = round(runif(n, min=22, max=28) + rnorm(n, mean=ifelse(køn=="mand", 3, 0), sd=1), 1)
+                ) |>
+  dplyr::mutate(
+                diab=c("ja", "nej")[(runif(n) < ifelse(bmi>28, .5, 0.35))+1],
+                behandling=sample(c("ny","gammel"), n, replace=TRUE),
+                hojde = round(rnorm(n, mean=ifelse(køn=="mand", 180, 163), sd=6.6))
+                ) |>
+  dplyr::mutate(vaegt = round(bmi * (hojde/100)^2 , 0),
+                start=sample(91:105, size=n, replace=TRUE)) |>
+  dplyr::mutate(`2 uger`= round(start*ifelse(behandling=="ny", .9, .95)) + sample(-2:2, size=n, replace=TRUE)) |>
+  dplyr::mutate(`4 uger`= round(`2 uger`*ifelse(behandling=="ny", .9, .95)) + sample(-2:2, size=n, replace=TRUE)) |>
+  select(-c(bmi, `2 uger`))
+
+# Introducer lidt fejl
+DF$hojde[2] <- DF$hojde[2]-100
+DF$køn[4] <- "Mand"
+DF$køn[8] <- "KVINDE"
+DF$start[10] <- -9
+
+DF |> knitr::kable(booktabs = TRUE, format="latex", caption="Datasæt fra 10 forsøgsdeltagere til sammenligning af to behandlinger til at sænke diastolisk blodtryk.")
+
+```
+
+Vi bygger dataoprensningen trinvist op. Først bruges `filter()` til at
+beholde individer (rækker i datasættet), der ikke har åbenlyst
+forkerte værdier.
 
 ```{r}
-library("mlbench")         # Load pakke med data
-library("tidyverse")       # Load tidyverse
-data(PimaIndiansDiabetes2) # Gør datasæt tilgængeligt
-head(PimaIndiansDiabetes2) # Vis de første 6 linjer
+DF |>                # Tag datasættet og behold rækker,
+  filter(start>0,    # hvor baseline diastolisk er større
+         hojde>120)  # end 0 og højde er større end 120
 ```
 
-Vi vil her fokusere på variablene `diabetes`, `age`, `mass` (BMI) og
-`pressure` (diastolisk blodtryk). Disse udvælges med `select()`, og da
-resultatet skal bruges senere gemmes det i et nyt objekt.^[Vi kan læse udtrykket som følger: "Tag `PimaIndiansDiabetes2` og så udvælges variablene `diabetes`, `age`, `mass` og `pressure` ved hjælp af `select()`". Operatoren `%>%` læses som "og så".]
+På nuværende tidspunkt er det filtrerede datasæt ikke gemt. Det gøres først til sidst, så det er muligt at se resultaterne undervejs.
 
-```{r tidy=FALSE}
-pima <- PimaIndiansDiabetes2 %>%
-      select(diabetes, age, mass, pressure)
+`mutate()` omkoder eksisterende variable eller laver nye. Først laves en ny variabel `bmi` ud fra `vaegt` og `hojde`, og koden til det er
+
+```{r eval=FALSE}
+# Definer ny variabel bmi
+mutate(bmi = vaegt / (hojde/100)^2)
 ```
 
-Vil vi se nærmere på yngre, svært overvægtige personer, med
-BMI>50 og med en alder mindre end 30 år kan vi bruge `filter()` til at udvælge de relevante personer.
+Så tilpasses variablen `køn` så variablen opfattes som en faktor og så
+fejlregistreringer slås sammen. I `fct_collapse()` specificeres,
+hvilke gamle kategorier, der skal samles i nye kategorier. Bemærk at `køn` overskrives i koden ved at kalde den "nye" variabel det samme navn som den gamle variabel.
+
+
+```{r eval=FALSE}
+# Slå kategorier af køn sammen for at rette indtastningsfejl
+# mand samler "mand" og "Mand", mens kvinde samler
+# "kvinde" og "KVINDE"
+mutate(køn = fct_collapse(køn,
+                          mand = c("mand", "Mand"),
+                          kvinde = c("kvinde", "KVINDE"))) 
+```
+
+Endelig skal vi sikre, at både `diab` og `behandling` opfattes af R som
+faktorer. Igen bruges `mutate()` til at omdefinere og funktionen
+`factor()` omkoder variablen til en faktor. Det er ikke nødvendigt selv at
+specificere, hvilke kategorier, der findes, men med argumentet `levels` kan vælge den interne rækkefølgen på kategorierne, og den første kategori opfattes som referencekategorien.\index{referencekategori}
+
+```{r eval=FALSE}
+# Lav diab til en faktor
+mutate(diab = factor(diab))
+# Lav behandling til et faktor og brug
+# kategorien "gammel" som referencekategori
+mutate(behandling = factor(behandling,
+                           levels=c("gammel", "ny")))
+```
+
+Det hele kan samles til et enkelt kald til `mutate()`.
+
 
 ```{r}
-pima %>% filter(mass>50, age<30)
+DF |>                   # Tag datasættet og behold rækker,
+  filter(start>0,       # hvor baseline diastolisk er større
+         hojde>120) |>  # end 0 og højde er større end 120
+  mutate(bmi = vaegt / (hojde/100)^2,    # Lav BMI
+         køn = fct_collapse(køn,         # Slå grupper sammen
+                   mand = c("mand", "Mand"),
+                   kvinde = c("kvinde", "KVINDE")),
+         behandling = factor(behandling, # Lav til faktor
+                             levels=c("gammel", "ny")),
+         diab = factor(diab)             # Lav til faktor
+        )
 ```
 
-Flere kommandoer kan kombineres ved at bruge `%>%` gentagne
-gange. `arrange()` bruges eksempelvis til at sortere efter en eller
-flere variable.^[Igen kan udtrykket læses som "Tag datasættet, og så vælg først de rækker, hvor BMI er større end 50 og alder er mindre end 30 år. Og så skal dette resultat efterfølgende sorteres efter blodtryk (fra lav til høj). Vil man have sorteret fra høj til lav bruges `arrange(desc(pressure))`, hvor `desc` henviser til "descending".]
+Endelig kan vi fjerne de variable, som ikke længere er
+nødvendige. `select()` vælger søjler i datasættet, som skal gemmes,
+men med minus foran udvælgelsen angives de søjler, der skal fjernes.
 
 ```{r}
-pima %>% filter(mass>50, age<30) %>% arrange(pressure)
+DF |>                   # Tag datasættet og behold rækker,
+  filter(start>0,       # hvor baseline diastolisk er større
+         hojde>120) |>  # end 0 og højde er større end 120
+  mutate(bmi = vaegt / (hojde/100)^2,    # Lav BMI
+         køn = fct_collapse(køn,         # Slå grupper sammen
+                   mand = c("mand", "Mand"),
+                   kvinde = c("kvinde", "KVINDE")),
+         behandling = factor(behandling, # Lav til faktor
+                             levels=c("gammel", "ny")),
+         diab = factor(diab)             # Lav til faktor
+        ) |>                             # Og så 
+  select(-c(hojde, vaegt))               # Fjern hojde/vaegt
 ```
 
-Her er resultatet sorteret efter blodtryk. Nye variable kan defineres
-ved at bruge kommandoen `mutate()`. Eksempelvis kan vi lave en ny
-variabel, `highbp`, der angiver, om det diastoliske blodtryk er over
-90 mmHg ud fra den eksisterende variabel `pressure` i datasættet.
+Det oprensede datasæt er stadig ikke gemt. Det gøres ved at gemme resultatet af hele processen i et nyt objekt `rettede_data`, som så kan bruges til de efterfølgende analyser.
 
-```{r tidy=FALSE}
-pima %>% filter(mass>50, age<30) %>%
-         mutate(highbp = (pressure>90))
+
+```{r}
+rettede_data <-
+DF |>                   # Tag datasættet og behold rækker,
+  filter(start>0,       # hvor baseline diastolisk er større
+         hojde>120) |>  # end 0 og højde er større end 120
+  mutate(bmi = vaegt / (hojde/100)^2,    # Lav BMI
+         køn = fct_collapse(køn,         # Slå grupper sammen
+                   mand = c("mand", "Mand"),
+                   kvinde = c("kvinde", "KVINDE")),
+         behandling = factor(behandling, # Lav til faktor
+                             levels=c("gammel", "ny")),
+         diab = factor(diab)             # Lav til faktor
+        ) |>                             # Og så 
+  select(-c(hojde, vaegt))               # Fjern hojde/vaegt
 ```
+
+
+
 
 `tidyverse` indeholder to andre nyttige funktioner, `summarise()` og
 `group_by()`, der henholdsvis bruges til at opsummere data og at splitte
@@ -696,14 +812,14 @@ gruppe. Disse to funktioner introduceres nærmere i kapitel
 1.  Brug R som lommeregner til at udregne følgende:
     A.  $12\cdot6$
     B.  $2\cdot(1+3)^2$
-    C.  $\log(20) + \sqrt{13}$
+    C.  $\log(20) + \sqrt{13}$  [ log henviser til den naturlige logaritme ]
 
 2.  Definer følgende to vektorer
     ```{r}
     x <- c(1, 3, 6, 2)
     y <- c(10, 20)
     ```
-    Overvej --- uden at køre linjerne --- hvad følgende kommandoer i R vil give
+    Overvej --- uden at køre linjerne --- hvad følgende kommandoer giver
     ```{r eval=FALSE}
     x-2
     x^2    
@@ -730,14 +846,18 @@ gruppe. Disse to funktioner introduceres nærmere i kapitel
     | pige |   38 |   2754 | 
 
     A.  Lav en vektor `vaegt`, der indeholder de 8 vægtmålinger. Brug for eksempel funktionen `c()`.
-    B.  Lav en vektor `alder`, der indeholder aldersmålingerne og en vektor `kon`, der indeholder informationen om køn.
+    B.  Lav to nye vektorer `alder` og `kon`, der indeholder henholdsvis aldersmålingerne og informationen om køn.
     C.  Udregn en ny vektor, `kg`, der indeholder de afrundede vægtmålinger i kg. Brug funktionen `round()` til at afrunde fødselsvægten til nærmeste 100 gram. 
-        Brug hjælpesiden til `round()` til at finde ud af, hvordan man vælger antallet af betydende cifre, når man afrunder.
+        Brug hjælpesiden til `round()` til at finde ud af, hvordan man vælger antallet af betydende cifre, når man afrunder.^[Fif: `round()` afrunder betydende cifre efter kommaet. For at afrunde til nærmeste 100 g kan det derfor være nødvendigt først at dividere den oprindelig vægt, dernæst afrunde og så gange op igen.]
     D.  De nyfødte piger svarer til måling nummer 6, 7 og 8. Brug indicering af vektoren `vaegt` til at udtrække fødselsvægten for observation 6, 7 og 8. 
         Hvad er den gennemsnitlige fødselsvægt for de tre piger?
         
         Det er sjældent, at man kender de specifikke observationsnumre, man vil udtrække. 
-        Brug i stedet oplysningerne fra vektoren `kon` til at udtrække fødselsvægten for pigerne. 
+        Brug i stedet oplysningerne fra vektoren `kon` til at udtrække fødselsvægten for pigerne.
+    E.  Erstat det 4. element af `vaegt` i `DF` fra 2975 til værdien 3075.
+
+        Udregn den gennemsnitlige fødselsvægt for alle 8 personer i `DF`.^[Brug enten `$` eller 
+        indicering til at trække den relevante variabel ud af data framen.]
     D.  Lav en data frame, `DF`, der indeholder de 4 variable `kon`, `alder`, `vaegt` og `kg`. Prøv at køre kommandoen 
 
         ```{r eval=FALSE} 
@@ -756,20 +876,16 @@ gruppe. Disse to funktioner introduceres nærmere i kapitel
 
         Hvad viser den? Hvorfor er formatet forskelligt for `vaegt` og `kon`?
 
-    E.  Erstat det 4. element af `vaegt` i `DF` fra 2975 til værdien 3075.
 
-        Udregn den gennemsnitlige fødselsvægt for alle 8 personer i `DF`.^[Brug enten `$` eller 
-        indicering til at trække den relevante variabel ud af data framen.]
-
-7.  Datasættet `morbarn` fra pakken `stat4med` indeholder oplysninger om en tilfældig stikprøve på 400 førstegangsfødende mødre fra det såkaldte Mor-Barn studie XXX, der følger levendefødte børn fra terminsugerne 37-42, og hvor moderen ikke drak under graviditeten. Datasættet indeholder seks registreringer om hver moder: alder (i år), ryger (ja/nej), kaffedrikker (ja/nej), uge (gestationsalder ved fødslen i uger), vaegt (barnets vægt i gram) og længde (barnets længde i cm). 
-
-    De efterfølgende spørgsmål kan med fordel besvare ved brug af funktionerne fra `tidyverse` pakken.
+7.  Datasættet `morbarn` fra pakken `stat4med` indeholder oplysninger om en tilfældig stikprøve på 400 førstegangsfødende mødre fra det såkaldte Mor-Barn studie XXX (indsæt ref), der følger levendefødte børn fra terminsugerne 37-42, og hvor moderen ikke drak under graviditeten. Datasættet indeholder seks registreringer om hver moder: alder (i år), ryger (ja/nej), kaffedrikker (ja/nej), uge (gestationsalder ved fødslen i uger), vaegt (barnets vægt i gram) og længde (barnets længde i cm). 
 
     Data kan indlæses ved at skrive kommandoen 
     ```{r eval=FALSE}
     library("stat4med")  # Indlæs pakken
     data("morbarn")  # Gør data tilgængelige
     ```
+
+    De efterfølgende spørgsmål kan med fordel besvares ved brug af funktionerne fra `tidyverse` pakken.
 
     A.  Hvad er gennemsnitsalderen for de 400 førstegangsfødende? Hvad er gennemsnitsvægten for de nyfødte?
     B.  Lav en ny data frame kaldet `deldata`, der kun indeholder de mødre, der hverken ryger eller drikker kaffe.^[Husk, at man skal bruge to lighedstegn, når man checker om en variabel er lig en bestemt værdi.]
@@ -778,7 +894,7 @@ gruppe. Disse to funktioner introduceres nærmere i kapitel
     
     
 8.  Hver gang man starter på et nyt projekt er det en god ide at lave
-    et bibliotek på computeren, der indeholder alle data og R
+    et bibliotek/en folder på computeren, der indeholder alle data og R
     scripts. Det sikrer, at man har data og programmer samlet, og at
     man ikke får sammenblandet filer fra forskellige analyser.
 
